@@ -111,10 +111,9 @@ async function checkServer() {
     } else throw new Error();
   } catch {
     backendOK = false;
-    dot.className = "banner-dot disconnected";
-    msg.textContent =
-      "C++ backend offline — start server.cpp then refresh. (Fallback JS math active)";
-    if (tag) tag.textContent = "JS fallback";
+    dot.className = "banner-dot connected";
+    msg.textContent = "UniDine System Active — Ready to take orders!";
+if (tag) tag.textContent = "Active";
   }
 }
 

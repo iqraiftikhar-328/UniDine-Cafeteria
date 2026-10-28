@@ -1,24 +1,35 @@
 # UniDine — University Cafeteria System
 
-Full-stack cafeteria app: C++ backend + HTML/CSS/JS frontend.
+A full-stack cafeteria ordering system with a modern HTML/CSS/JS frontend and a C++ backend. 
+The frontend is fully deployed on GitHub Pages and features a built-in JavaScript fallback system, allowing it to calculate bills and process orders even without the C++ server running.
 
-## Live
-- Frontend: https://iqraiftikhar-328.github.io/UniDine-Cafeteria/
-- Backend: https://unidine-backend.onrender.com/ping
+## 🌐 Live Demo
+- **Frontend:** https://iqraftikhar-328.github.io/UniDine-Cafeteria/
 
-## Features
-- Menu with images and search
-- Real-time cart
-- Server-side price calculation (C++)
-- Order receipts, daily summary
-- Student/guest login
-- Dark/light mode
-- Order tracking, feedback
+## ✨ Features
+- 🍔 Interactive menu with images and search
+- 🛒 Real-time cart with quantity adjustment
+- 💰 Server-side price calculation (C++) with **JavaScript fallback**
+- 🧾 Receipt generation with real order IDs
+- 📊 Daily sales summary (revenue, top items, order log)
+- 👤 Student / Guest login with student discount
+- 🌙 Dark/light mode toggle
+- 📍 Order tracking with status timeline
+- ⭐ Feedback system
+- 🔥 Combo deals panel
+- 📱 Fully responsive
 
-## Run Locally
+## 🏗️ Tech Stack
+| Layer | Technology |
+|-------|-----------|
+| Frontend | HTML5, CSS3, Vanilla JS |
+| Backend | C++17 (raw BSD sockets) |
+| Deployment | GitHub Pages (Frontend) |
 
-### Backend
-```bash
-cd backend
-g++ -std=c++17 -o server.exe server.cpp -lws2_32
-server.exe
+## 📂 Project Structure
+UniDine-Cafeteria/
+├── frontend/ # Development copy of the frontend
+├── backend/ # C++ server (server.cpp) and Dockerfile
+├── docs/ # Production build hosted on GitHub Pages
+└── README.md
+
