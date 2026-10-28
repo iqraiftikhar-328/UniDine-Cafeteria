@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>University Cafeteria — Order System</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+
+  <!-- ★ External Stylesheet (separate CSS file) -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- LOGIN PAGE - Shows first when page loads -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="login-container" >
+            <img src="logo.png" alt="Logo" class="logo-img">
+        <h2>Welcome to Unidine</h2>
+        <p>University Cafeteria Order System</p>
+        
+        <div class="login-buttons">
+            <button class="login-btn student" id="studentLoginBtn">
+                <i class="fas fa-user-graduate"></i> Login as Student
+            </button>
+            <button class="login-btn guest" id="guestLoginBtn">
+                <i class="fas fa-user-friends"></i> Continue as Guest
+            </button>
+        </div>
+        <!-- Student Login Form (hidden initially) -->
+        <div class="student-login-form" id="studentLoginForm">
+            <form id="studentForm">
+                <div class="form-group-login">
+                    <label><i class="fas fa-id-card"></i> Student ID</label>
+                    <input type="text" id="studentId" placeholder="e.g., STU-2024-001" required>
+                </div>
+                <div class="form-group-login">
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="studentPassword" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group-login">
+                    <label><i class="fas fa-envelope"></i> University Email</label>
+                    <input type="email" id="studentEmail" placeholder="student@university.edu.pk" required>
+                </div>
+                <button type="submit" class="submit-login">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+            <button class="back-to-options" id="backToOptionsBtn">
+                <i class="fas fa-arrow-left"></i> Back to options
+            </button>
+        </div>
+        
+        <div class="login-note">
+            <i class="fas fa-shield-alt"></i> Your data is secure with us
+        </div>
+    </div>
+</div>
+
+  <!-- ══════════════════════════════════════
+       TOP NAVIGATION BAR
+  ══════════════════════════════════════ -->
+  <nav class="topnav">
+    <div class="brand">
+      <div class="brand-icon"><img src="logo.png" alt="Logo" class="logo"> </div>
+      <div class="brand-text">
+        <h1>UniDine</h1>
+        <p>Order Management System</p>
+      </div>
+    </div>
+
+        <div class="nav-tabs">
+      <button class="ntab active" data-panel="menu">&#9776;&nbsp; Menu</button>
+      <button class="ntab"        data-panel="order">
+        &#128722;&nbsp; Order
+        <span class="cart-badge hidden" id="cart-badge">0</span>
+      </button>
+      <button class="ntab" data-panel="deals">🔥&nbsp; Deals</button>
+      <button class="ntab" data-panel="tracking">📍&nbsp; Track</button>
+      <button class="ntab"     data-panel="summary">&#9998;&nbsp; Summary</button>
+    </div>
+
+    <div class="clock-box">
+      <div class="clock-time" id="clk">--:--:--</div>
+      <div class="clock-date" id="clk-date"></div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════
+       SERVER STATUS BANNER
+  ══════════════════════════════════════ -->
+  <div class="server-banner" id="server-banner">
+    <span class="banner-dot" id="banner-dot"></span>
+    <span id="banner-msg">Connecting to C++ backend…</span>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       MAIN CONTENT AREA
+  ══════════════════════════════════════ -->
+  <main>
+
+    <!-- ── PANEL 1 : MENU ──────────────── -->
+    <div id="panel-menu" class="panel active">
+      <div class="sec-head">
+        <h2>TODAY'S MENU</h2>
+        <span>Click any item to add to your order</span>
+      </div>
+      <div id="menu-root"></div>
+      <div class="menu-bar">
+        <button class="btn btn-ghost" data-goto="order">View Order &rarr;</button>
+         <!-- Add Profile Button to Nav - put this inside .nav-right div -->
+<!-- Find the .nav-right div and add this button inside it -->
+ <div>
+<button class="profile-nav-btn" id="profileNavBtn">👤
+    <i class="fas fa-user-circle"></i>
+</button>
+</div>
+      </div>
+    </div>
+
+    <!-- ── PANEL 2 : ORDER ─────────────── -->
+    <div id="panel-order" class="panel">
+      <div class="sec-head">
+        <h2>CURRENT ORDER</h2>
+        <span>Adjust quantities &amp; checkout</span>
+      </div>
+
+      <div class="order-wrap">
+
+        <!-- Left: Cart items list -->
+        <div class="items-col">
+          <div class="items-box">
+            <div class="items-head">
+              <span class="items-head-lbl">Cart Items</span>
+              <button class="clr-btn" id="clear-btn">&#10005; Clear All</button>
+            </div>
+            <div id="cart-list"></div>
+          </div>
+        </div>
+
+        <!-- Right: Bill sidebar -->
+        <aside class="sidebar">
+          <div class="cust-box">
+            <label class="cust-lbl" for="cust-in">Customer Name</label>
+            <input id="cust-in" type="text"
+                   placeholder="e.g. Ahmed Hassan"
+                   maxlength="40" autocomplete="off" />
+          </div>
+
+          <div class="bill-box">
+            <div class="bill-box-head">
+              <span>Bill Summary</span>
+              <span class="backend-tag" id="backend-tag">via C++ Backend</span>
+            </div>
+            <div class="bill-rows">
+              <div class="bill-row">
+                <span>Total Items</span>
+                <span id="b-items">0</span>
+              </div>
+              <div class="bill-row">
+                <span>Subtotal</span>
+                <span id="b-sub">Rs 0</span>
+              </div>
+              <div class="bill-row">
+              </div>
+              <div class="bill-sep"></div>
+              <div class="bill-grand">
+                <span class="grand-lbl">TOTAL</span>
+                <span class="grand-amt" id="b-grand">Rs 0</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="calc-status" id="calc-status"></div>
+
+          <button class="btn-place" id="place-btn">PLACE ORDER</button>
+        </aside>
+
+      </div>
+    </div>
+
+    <!-- ── PANEL 3 : SUMMARY ───────────── -->
+    <div id="panel-summary" class="panel">
+      <div class="sec-head">
+        <h2>DAILY SUMMARY</h2>
+        <span id="sum-date"></span>
+      </div>
+      <div id="sum-root"></div>
+    </div>
+
+  </main>
+
+  <!-- ══════════════════════════════════════
+       RECEIPT MODAL
+  ══════════════════════════════════════ -->
+  <div id="overlay" class="overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal-top">
+        <h2>RECEIPT</h2>
+        <p>University Cafeteria &mdash; Order Confirmed</p>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost"  id="close-modal-btn">Close</button>
+        <button class="btn btn-orange" id="new-order-btn">&#43; New Order</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       TOAST NOTIFICATION
+  ══════════════════════════════════════ -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="toast-dot"></span>
+    <span id="toast-msg"></span>
+  </div>
+  
+  <!-- Theme Toggle Button -->
+<button class="theme-toggle-btn" id="themeToggleBtn">🌙
+    <i class="fas fa-moon"></i>
+</button>
+
+<!-- Profile Sidebar -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="profile-sidebar" id="profileSidebar">
+    <div class="sidebar-header">
+        <button class="close-sidebar" id="closeSidebarBtn">&times;</button>
+        <div class="profile-pic">
+            <img id="profileAvatar" src="https://ui-avatars.com/api/?background=F97316&color=fff&name=Guest" alt="Profile">
+        </div>
+        <h3 id="profileName">Guest User</h3>
+        <p id="profileEmail">guest@unidine.com</p>
+    </div>
+    <div class="sidebar-body">
+        <div class="profile-info">
+            <div class="info-item"><i class="fas fa-phone"></i><span>+92 300 1234567</span></div>
+            <div class="info-item"><i class="fas fa-map-marker-alt"></i><span>University Campus</span></div>
+            <div class="info-item"><i class="fas fa-calendar"></i><span>Member since 2024</span></div>
+        </div>
+        <div class="sidebar-menu">
+            <button class="sidebar-btn" id="myOrdersSidebarBtn"><i class="fas fa-shopping-bag"></i> My Orders</button>
+            <button class="sidebar-btn" id="feedbackSidebarBtn"><i class="fas fa-star"></i> Give Feedback</button>
+            <button class="sidebar-btn" id="logoutSidebarBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+        <div class="sidebar-footer">
+            <div class="unidine-logo"><i class="fas fa-utensils"></i> <span>Unidine Cafeteria</span></div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </div>
+</aside>
+
+
+<!-- Deals Panel - add after menu panel -->
+<div id="panel-deals" class="panel">
+    <div class="sec-head">
+        <h2>🔥 HOT DEALS</h2>
+        <span>Save with combos</span>
+    </div>
+    <div id="deals-root"></div>
+</div>
+
+<!-- Tracking Panel -->
+<div id="panel-tracking" class="panel">
+    <div class="sec-head">
+        <h2>📍 TRACK ORDER</h2>
+        <span>Enter your order number</span>
+    </div>
+    <div class="tracking-container">
+        <div class="tracking-card">
+            <h3>Track Your Order</h3>
+            <div class="tracking-input-group">
+                <input type="text" id="trackOrderInput" placeholder="Order Number (e.g., 1)">
+                <button class="track-btn" id="trackOrderBtn">Track</button>
+            </div>
+        </div>
+        <div id="trackingResult"></div>
+    </div>
+</div>
+
+<!-- Feedback Modal -->
+<div class="feedback-modal" id="feedbackModal">
+    <div class="feedback-container">
+        <div class="feedback-header">
+            <h3><i class="fas fa-star"></i> We Value Your Feedback</h3>
+            <button class="close-sidebar" id="closeFeedbackBtn">&times;</button>
+        </div>
+        <div class="feedback-body">
+            <div class="unidine-contact">
+                <i class="fas fa-utensils" style="font-size: 40px; color: var(--orange);"></i>
+                <h4>Unidine Cafeteria</h4>
+                <p><i class="fas fa-phone"></i> +92 21 1234 5678</p>
+                <p><i class="fas fa-envelope"></i> feedback@unidine.edu.pk</p>
+                <p><i class="fas fa-clock"></i> Mon-Sat: 8AM - 8PM</p>
+            </div>
+            <form id="feedbackForm">
+                <div class="feedback-form-group">
+                    <label>Your Name</label>
+                    <input type="text" id="feedbackNameInput" required>
+                </div>
+                <div class="feedback-form-group">
+                    <label>Rating</label>
+                    <div class="rating-stars" id="ratingStars">
+                        <i class="far fa-star" data-rating="1"></i>
+                        <i class="far fa-star" data-rating="2"></i>
+                        <i class="far fa-star" data-rating="3"></i>
+                        <i class="far fa-star" data-rating="4"></i>
+                        <i class="far fa-star" data-rating="5"></i>
+                    </div>
+                </div>
+                <div class="feedback-form-group">
+                    <label>Your Message</label>
+                    <textarea id="feedbackMessageInput" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="submit-feedback">Submit Feedback</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+  <!-- ★ External JavaScript (loads after DOM) -->
+  <script src="app.js"></script>
+
+</body>
+</html>
